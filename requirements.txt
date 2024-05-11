@@ -13,7 +13,6 @@ bs4==0.0.2
 cachetools==5.3.3
 certifi==2024.2.2
 cffi==1.16.0
-charset-normalizer==3.3.2sci
 click==8.1.7
 colorama==0.4.6
 comtypes==1.4.1
