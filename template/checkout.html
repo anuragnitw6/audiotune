@@ -1,0 +1,102 @@
+<html>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "rzp_test_IhxHgns82jPG6y", // Enter the Key ID generated from the Dashboard
+        "amount": "9900",
+        "currency": "INR",
+        "description": "Acme Corp",
+        "image": "https://s3.amazonaws.com/rzp-mobile/images/rzp.jpg",
+        "prefill":
+        {
+            "email": "anuragnitw6@gmail.com",
+            "contact": +918238662907,
+        },
+        config: {
+            display: {
+                blocks: {
+                    utib: { //name for Axis block
+                        name: "Pay using Axis Bank",
+                        instruments: [
+                            {
+                                method: "card",
+                                issuers: ["UTIB"]
+                            },
+                            {
+                                method: "netbanking",
+                                banks: ["UTIB"]
+                            },
+                        ]
+                    },
+                    other: { //  name for other block
+                        name: "Other Payment modes",
+                        instruments: [
+                            {
+                                method: "card",
+                                issuers: ["ICIC"]
+                            },
+                            {
+                                method: 'netbanking',
+                            },
+                            {
+                                method: "upi"
+                            }
+                        ]
+                    }
+                },
+                hide: [
+                  
+                ],
+                sequence: ["block.utib", "block.other"],
+                preferences: {
+                    show_default_blocks: false // Should Checkout show its default blocks?
+                }
+            }
+        },
+        "handler": function (response) {
+            alert(response.razorpay_payment_id);
+            const d = new Date();
+            var pay_time = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + (d.getHours() > 12 ? d.getHours() - 12 : d.getHours()) + ':' + d.getMinutes() + ':' + d.getSeconds();
+
+            const body = {
+                "user_id": window.localStorage.getItem("user_id"),
+                "pay_id": response.razorpay_payment_id,
+                "payment_date": pay_time
+            }
+            fetch("https://www.audiotune.co/place-order", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                },
+                body: JSON.stringify(body)
+            })
+                .then((response) => response.json())
+                .then((json) => {
+                    console.log(json)
+
+                    window.localStorage.setItem("status", "1")
+                    window.location.href = "https://www.audiotune.co/home";
+                                                    
+                })
+             
+                
+        },
+        //"modal": {
+        //    "ondismiss": function () {
+        //        if (confirm("Are you sure, you want to close the form?")) {
+        //            txt = "You pressed OK!";
+        //            console.log("Checkout form closed by the user");
+        //        } else {
+        //            txt = "You pressed Cancel!";
+        //           console.log("Complete the Payment")
+        //        }
+        //    }
+        //}
+    };
+    var rzp1 = new Razorpay(options);
+    window.onload = function (e) {
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
+</html>

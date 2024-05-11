@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+Developer : wiz64 ,
+Contribute: https://github.com/wiz64/saavn-web-ui ,
+Don't forget to star the repo
+-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Audiotune</title>
+    <meta name="description" content="Audiotune is an Ad-Free podcast , High Quality podcast with Metadata support, and a Modern Design. A large library of stories. developed by audiotune">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bitter:400,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="../static/css/style-starter.css">
+    <link rel="stylesheet" href="../static/css/loginstyle.css">
+</head>
+
+<body style="padding-bottom: 50px;background: rgb(255,255,255);">
+    <header class="header-dark" style="color: rgb(255,255,255);padding: 0px 0px 10px;">
+        <nav class="navbar navbar-dark navbar-expand-lg navigation-clean-search">
+            <div class="container">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="logo_name" style="color: #ff7f50;font-size: 24px;font-weight: 600;font-family: 'Poppins';margin-left: 20px;">audiotune</a></li>
+
+                    <li class="nav-item" style="margin-left: 20px;visibility:hidden"><a class="btn btn-primary-login" id="logout" onclick="logout()">Logout</a></li>
+
+                </ul>
+            </div>
+            <!-- <div class="collapse navbar-collapse" style="margin-right: 20px;" > -->
+
+            <div class="nav-item" style="width: 150px;display: -webkit-box;text-overflow: ellipsis;white-space: nowrap;right:20px;
+                    overflow: hidden;margin-right: 20px;"><a class="user_name" id="user_name"></a></div>
+
+            <div class="nav-item" style="margin-right: 20px;"><a class="btn btn-primary-login" id="form-open" href="./login">Login</a></div>
+
+
+            <!-- </div>  -->
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <h1 class="text-center" style="margin: 0px; color: #264d76; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">100+</h1>
+                    <h3 class="text-center" style="margin-top: 20px;color: rgba(105, 148, 213);font-family: Bitter, serif;">Audiobooks &amp; Stories</h3>
+                    <p class="text-center" style="color: rgba(105, 148, 213);padding: 0px 5px;">Find audiobooks &amp; stories of your choice</p>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+    <div>
+        <div class="tab-content">
+            <div class="tab-pane active" role="tabpanel" id="tab-1">
+                <section class="highlight-clean" style=" color: rgb(249,249,249);padding-top: 20px;margin-top: 200px">
+                    <div class="text-center" hidden>
+                        <select id="saavn-bitrate">
+                            <option value="4">320kbps</option>
+                            <option value="3" selected="">160kbps</option>
+                            <option value="2">96kbps</option>
+                            <option value="1">48kbps</option>
+                        </select>
+                    </div>
+                    <p class="text-center" style="padding: 0px 5px;"></p>
+                    <div class="container" style="padding: 0px;">
+                        <div class="intro">
+                            <form class="text-center" action="#" method="get" hidden>
+                                <div style="width: 95%;margin: auto;padding: 3px;" placeholder="Enter Song, Artist or Album name"><input class="form-control float-left fit-content" type="text" id="saavn-search-box" style="margin: 0px;color: #dfe0f5;max-width: 100%;width: 100%;" placeholder="Enter Name, Year, Artist"><button class="btn btn-primary" id="saavn-search-trigger" type="submit" style="text-align: center;margin-top: 20px;" onclick="SaavnSearch()">Search</button></div>
+                                <h5 class="text-uppercase text-center" style="color: rgb(165,255,184);" hidden>Results</h5>
+                            </form>
+                        </div>
+                        <div id="saavn-results" style="margin-bottom: 20px;">
+                            <h5>Featured</h5>
+                        </div>
+                        <div class="text-center" style="width:100%" hidden><button id="loadmore" style="width: 100%;">Load More</button></div>
+                        <div class="button-container" hidden>
+                        </div>
+                        <script>const buttonTitles = ['2023', 'English Songs', 'Edward Maya', 'Zack Knight', 'Akcent', 'Arijit Singh', 'Enrique Iglesias', 'Pitbull', 'Imran Khan', 'DJ Snake', 'Darshan Raval', 'Jubin Nautiyal', 'Armaan Malik', 'Old Songs', "Adele", "Billie Eilish", "Imagine Dragons", "Ed Sheeran", "Neha Kakkar", "Badshah", "Atif Aslam", "Guru Randhawa", "Shreya Ghoshal", "Tony Kakkar", "Harrdy Sandhu", "Armaan Malik", "Diljit Dosanjh", "Sonu Nigam", "Vishal Dadlani", "Kanika Kapoor", "Sukhwinder Singh", "Sunidhi Chauhan", "Mika Singh", "Shaan", "Mohit Chauhan", "Pritam", "KK", "Yo Yo Honey Singh", "Taylor Swift", "Sia", "Radioactive", "Halsey", "The Chainsmokers", "Drake", "Justin Bieber", "Beyonce", "The Weeknd", "Rihanna", "Lady Gaga", "AC/DC", "Michael Jackson", "The Rolling Stones"];
+                            const buttonContainer = document.querySelector('.button-container');
+
+                            buttonTitles.forEach(title => {
+                                const button = document.createElement('button');
+                                button.classList.add('search-toggle');
+                                button.textContent = title;
+                                button.setAttribute('onclick', `doSaavnSearch('${title}')`);
+                                buttonContainer.appendChild(button);
+                            });</script>
+
+                        <p class="footer" align="center">
+                            Originally by audiotune.<br>
+                            Re-Designed by audiotune
+                        </p>
+                        <div style="padding-bottom: 40px;">
+
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <div id="audio-player" style="z-index: 99;background: #ffffff33; width: 100%;margin: 0px;color: var(--light);backdrop-filter: blur(4px);border-top-left-radius: 10px;border-top-right-radius: 20px;">
+        <div class="row" style="margin: 0px;">
+            <div class="col-auto fit-content" style="padding: 0px;">
+                <img class="img-fluid d-inline" id="player-image" style="height: 75px;width: 75px;border-radius: 10px;" src="https://i.pinimg.com/originals/ed/54/d2/ed54d2fa700d36d4f2671e1be84651df.jpg" loading="lazy">
+            </div>
+            <div class="col fit-content" style="padding: 0px;">
+                <div style="max-height: 24px;max-width: 95%;word-wrap: normal; padding-left: 20px;"><span id="player-name" style="color: #264d76;font-size: 20px;font-family: Verdana, Geneva, Tahoma, sans-serif;">Podcast</span><span><br></span><span id="player-album" style="color: #ff7f50;" hidden>Album</span></div><br>
+                <audio id="player" controls="controls" controlsList="nodownload" style="width: 100%;height: 30px; padding-left: 20px; padding-top:5px;">
+                    <source id="audioSource" src=""></source>
+                    Your browser does not support the audio format.
+                </audio>
+            </div>
+        </div>
+    </div>
+    <div id="snackbar">Please login to listen Podcast..</div>
+    
+    <a id="snackbar_pay" href="./payment">Subscribe here</a>
+    <div id="snackbar">Please login to listen Podcast..</div>
+    
+
+
+    <style>
+        #user_name {
+            color: #ff7f50;
+            padding: 20px;
+        }
+
+        #snackbar_pay {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: red;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 30px;
+            height: 60px;
+            font-size: 17px;
+        }
+
+            #snackbar_pay.show {
+                visibility: visible;
+                -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            }
+
+        #snackbar {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: red;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 30px;
+            height: 60px;
+            font-size: 17px;
+        }
+
+            #snackbar.show {
+                visibility: visible;
+                -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            }
+
+        @-webkit-keyframes fadein {
+            from {
+                top: 0;
+                opacity: 0;
+            }
+
+            to {
+                top: 30px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadein {
+            from {
+                top: 0;
+                opacity: 0;
+            }
+
+            to {
+                top: 30px;
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeout {
+            from {
+                top: 30px;
+                opacity: 1;
+            }
+
+            to {
+                top: 0;
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                top: 30px;
+                opacity: 1;
+            }
+
+            to {
+                top: 0;
+                opacity: 0;
+            }
+        }
+    </style>
+    <style>
+
+        #saavn-results {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        /* Three columns on desktop */
+        @media screen and (min-width: 992px) {
+            .song-container {
+                width: calc(33.33% - 20px);
+                margin: 0 10px 20px 10px;
+            }
+        }
+
+        /* Two columns on desktop */
+        @media screen and (min-width: 768px) and (max-width: 991px) {
+            .song-container {
+                width: calc(50% - 20px);
+                margin: 0 10px 20px 10px;
+            }
+        }
+
+        /* One column on mobile */
+        @media screen and (max-width: 767px) {
+            .song-container {
+                width: calc(100% - 20px);
+                margin: 0 10px 20px 10px;
+            }
+        }
+
+        .search-toggle-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        .search-toggle {
+            background: rgba(0, 0, 0, 0.1);
+            color: #fff;
+            font-size: 18px;
+            font-family: Aclonica, sans-serif;
+            padding: 6px;
+            border-style: none;
+        }
+
+            .search-toggle:nth-child(10n+1) {
+                color: #ceea82
+            }
+
+            .search-toggle:nth-child(10n+2) {
+                color: #70cee2
+            }
+
+            .search-toggle:nth-child(10n+3) {
+                color: #ef2b2d
+            }
+
+            .search-toggle:nth-child(10n+4) {
+                color: #23b805
+            }
+
+            .search-toggle:nth-child(10n+5) {
+                color: var(--primary)
+            }
+
+            .search-toggle:nth-child(10n+6) {
+                color: #cee007
+            }
+
+            .search-toggle:nth-child(10n+7) {
+                color: #ff77a8
+            }
+
+            .search-toggle:nth-child(10n+8) {
+                color: #21a9af
+            }
+
+            .search-toggle:nth-child(10n+9) {
+                color: var(--warning)
+            }
+
+            .search-toggle:nth-child(10n+10) {
+                color: #e316e7
+            }
+    </style>
+    <style>
+        .mpopup {
+            position: fixed;
+            overflow: auto;
+            overflow-x: hidden;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            width: auto;
+            height: auto;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            display: none;
+        }
+
+        ul.nobullets {
+            list-style-type: none; /* Remove bullets */
+            padding: 0; /* Remove padding */
+            margin: 0; /* Remove margins */
+        }
+    </style>
+    <!-- Modal popup box -->
+    <div id="mpopupBox" class="mpopup">
+        <!-- Modal content -->
+        <div class="modal-content">
+
+            <div class="modal-header" style="display:inline;">
+                <span class="close">×</span>
+                <h2>Downloads</h2>
+            </div>
+            <div class="modal-body">
+                <!-- list of songs, with a small cover art pic, name, album name -->
+                <row>
+                    <ul id="download-list" class="nobullets">
+                        <!--<li>
+                        <div class="col">
+
+                            <img id="download-cover" src="https://i.pinimg.com/originals/ed/54/d2/ed54d2fa700d36d4f2671e1be84651df.jpg" width="50px">
+                            <div style="display: inline;">
+                            <span id="download-name">Song</span>
+                            <span id="download-album">Album</span>
+                            <br>
+                            <span id="download-size">Size</span>
+                            <span id="download-status" style="color:green">Compiling.</span>
+                            </div>
+                        </div>
+                        <hr>
+                        </li>-->
+
+
+
+
+                    </ul>
+                </row>
+            </div>
+            <div class="modal-footer" style="text-align: center;">
+                <p>Don't flood the Media Server, Have patience...</p>
+            </div>
+
+        </div>
+    </div>
+    <script>// Select modal
+        var mpopup = document.getElementById('mpopupBox');
+
+        // Select trigger link
+        var mpLink = document.getElementById("mpopupLink");
+
+        // Select close action element
+        var close = document.getElementsByClassName("close")[0];
+
+        // Open modal once the link is clicked
+        mpLink.onclick = function () {
+            mpopup.style.display = "block";
+        };
+
+        // Close modal once close element is clicked
+        close.onclick = function () {
+            mpopup.style.display = "none";
+        };
+
+        // Close modal when user clicks outside of the modal box
+        window.onclick = function (event) {
+            if (event.target == mpopup) {
+                mpopup.style.display = "none";
+            }
+        };</script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/js/functions.js"></script>
+    <script src="../static/js/saavn-search.js"></script>
+
+    <script>/* When the user clicks on the button,
+        toggle between hiding and showing the dropdown content */
+        function myFunction() {
+            //   document.getElementById("myDropdown").classList.toggle("show");
+            //   const dropdown = document.getElementById("myDropdown");
+            //   dropdown.style.width = "190px";
+            //   dropdown.style.height = "170px";
+
+            document.getElementById("myDropdown").style.display = 'block';
+
+            // Close the dropdown if the user clicks outside of it
+            window.onclick = function (event) {
+
+                if (!event.target.matches("dropdown-content")) {
+                    // console.log(document.getElementById("myDropdown").style.display)
+                    // if(document.getElementById("myDropdown").style.display == 'none'){
+
+                    document.getElementById("myDropdown").style.display = 'none';
+                    // }
+                }
+            }
+            //   document.getElementById("myDropdown").style.width("150px");
+            //   document.getElementById("myDropdown").style.height("130px");
+        }</script>
+</body>
+
+</html>
